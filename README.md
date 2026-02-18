@@ -11,6 +11,13 @@ A full-stack grocery store management app with an admin dashboard, customer orde
 - Local product images for customer item cards
 - Role-based routing (admin vs customer)
 
+## Frontend Screenshots
+
+![Admin Dashboard](admin-dashboard.png)
+![Manage Products](admin-manage-products.png)
+![Customer Order Page](customer-page.png)
+![Server Test API](server-test-api.png)
+
 ## Tech Stack
 
 - Frontend: HTML, CSS, JavaScript, jQuery
