@@ -13,13 +13,13 @@ A full-stack grocery store management app with an admin dashboard, customer orde
 
 ## Frontend Screenshots
 
-Admin Dashboard
+### Admin Dashboard
 ![Admin Dashboard](admin-dashboard.png)
-Manage Products
+### Manage Products
 ![Manage Products](admin-manage-products.png)
-Customer Order Page
+### Customer Order Page
 ![Customer Order Page](customer-page.png)
-Server Test API
+### Server Test API
 ![Server Test API](server-test-api.png)
 
 ## Tech Stack
