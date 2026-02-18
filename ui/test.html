@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    <button onclick="testAPI()">Test API</button>
+    <div id="result"></div>
+    
+    <script src="js/packages/jquery.min.js"></script>
+    <script>
+        function testAPI() {
+            var apiUrl = 'http://127.0.0.1:5000/getProducts';
+            document.getElementById('result').innerHTML = 'Testing ' + apiUrl + '...<br>';
+            
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                success: function(response) {
+                    document.getElementById('result').innerHTML += '<br>SUCCESS!<br>';
+                    document.getElementById('result').innerHTML += 'Products found: ' + response.length + '<br>';
+                    document.getElementById('result').innerHTML += '<pre>' + JSON.stringify(response, null, 2) + '</pre>';
+                },
+                error: function(xhr, status, error) {
+                    document.getElementById('result').innerHTML += '<br>ERROR!<br>';
+                    document.getElementById('result').innerHTML += 'Status: ' + status + '<br>';
+                    document.getElementById('result').innerHTML += 'Error: ' + error + '<br>';
+                    document.getElementById('result').innerHTML += 'Response: ' + xhr.responseText + '<br>';
+                }
+            });
+        }
+        
+        // Auto-test on load
+        window.onload = function() {
+            setTimeout(testAPI, 1000);
+        };
+    </script>
+</body>
+</html>

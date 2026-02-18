@@ -5,9 +5,15 @@ def insert_order(connection, order):
     cursor = connection.cursor()
 
     order_query = ("INSERT INTO orders "
-             "(customer_name, total, datetime)"
-             "VALUES (%s, %s, %s)")
-    order_data = (order['customer_name'], order['grand_total'], datetime.now())
+             "(customer_name, delivery_address, total, datetime, status)"
+             "VALUES (%s, %s, %s, %s, %s)")
+    order_data = (
+        order['customer_name'],
+        order.get('delivery_address', ''),
+        order['grand_total'],
+        datetime.now(),
+        'Pending'
+    )
 
     cursor.execute(order_query, order_data)
     order_id = cursor.lastrowid
@@ -62,12 +68,14 @@ def get_all_orders(connection):
     query = ("SELECT * FROM orders")
     cursor.execute(query)
     response = []
-    for (order_id, customer_name, total, dt) in cursor:
+    for (order_id, customer_name, delivery_address, total, dt, status) in cursor:
         response.append({
             'order_id': order_id,
             'customer_name': customer_name,
+            'delivery_address': delivery_address,
             'total': total,
             'datetime': dt,
+            'status': status,
         })
 
     cursor.close()
@@ -77,6 +85,27 @@ def get_all_orders(connection):
         record['order_details'] = get_order_details(connection, record['order_id'])
 
     return response
+
+def update_order_status(connection, order_id, status):
+    cursor = connection.cursor()
+    query = "UPDATE orders SET status = %s WHERE order_id = %s"
+    data = (status, order_id)
+    cursor.execute(query, data)
+    connection.commit()
+    cursor.close()
+    return order_id
+
+def delete_order(connection, order_id):
+    cursor = connection.cursor()
+    # First delete order details (foreign key constraint)
+    query_details = "DELETE FROM order_details WHERE order_id = %s"
+    cursor.execute(query_details, (order_id,))
+    # Then delete the order
+    query_order = "DELETE FROM orders WHERE order_id = %s"
+    cursor.execute(query_order, (order_id,))
+    connection.commit()
+    cursor.close()
+    return order_id
 
 if __name__ == '__main__':
     connection = get_sql_connection()

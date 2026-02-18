@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Order - Grocery Store Management System</title>
+    <title>Place Order - Grocery Store Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,21 +20,9 @@
             <nav>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link">
-                            <i class="zmdi zmdi-view-dashboard"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="manage-product.html" class="nav-link">
-                            <i class="zmdi zmdi-assignment"></i>
-                            <span>Manage Products</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="order.html" class="nav-link active">
+                        <a href="customer-order.html" class="nav-link active">
                             <i class="zmdi zmdi-shopping-basket"></i>
-                            <span>New Order</span>
+                            <span>Place Order</span>
                         </a>
                     </li>
                 </ul>
@@ -48,10 +35,10 @@
             <div class="page-header">
                 <h1 class="page-title">
                     <i class="zmdi zmdi-shopping-basket"></i>
-                    Create New Order
+                    Place Your Order
                 </h1>
                 <div class="page-actions">
-                    <button type="button" class="btn-modern btn-secondary-modern" onclick="logout('admin')">
+                    <button type="button" class="btn-modern btn-secondary-modern" onclick="logout('customer')">
                         <i class="zmdi zmdi-power"></i>
                         Logout
                     </button>
@@ -64,11 +51,19 @@
                     <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">Customer Information</h2>
                     <div class="form-group-modern">
                         <label class="form-label-modern">Customer Name <span style="color: #EF4444;">*</span></label>
-                        <input name="customerName" id="customerName" type="text" class="form-control-modern" placeholder="Enter customer name" required>
+                        <input name="customerName" id="customerName" type="text" class="form-control-modern" placeholder="Your name" required readonly>
                     </div>
                     <div class="form-group-modern">
                         <label class="form-label-modern">Delivery Address <span style="color: #EF4444;">*</span></label>
                         <textarea name="deliveryAddress" id="deliveryAddress" class="form-control-modern" rows="3" placeholder="Enter delivery address" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Browse Items -->
+                <div class="card-modern">
+                    <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">Browse Items</h2>
+                    <div id="productCards" class="product-grid">
+                        <!-- Product cards will be loaded here -->
                     </div>
                 </div>
 
@@ -136,9 +131,11 @@
 
     <script src="js/packages/jquery.min.js"></script>
     <script src="js/custom/common.js"></script>
-    <script>
-        requireRole('admin');
-    </script>
     <script src="js/custom/order.js"></script>
+    <script>
+        requireRole('customer');
+        var customerName = localStorage.getItem('authEmail') || '';
+        $('#customerName').val(customerName);
+    </script>
 </body>
 </html>

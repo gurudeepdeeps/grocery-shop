@@ -1,116 +1,179 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title> GSMS </title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="csrf-token" content="kmapods5wQ5L1hn7rcR9OPst7EsN0gC7SrHh3m9K"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products - Grocery Store Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,600,700">
-    <link media="all" type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
-    <link media="all" type="text/css" rel="stylesheet" href="css/style.css?v=1.0">
-    <link media="all" type="text/css" rel="stylesheet" href="css/sidebar-menu.css?v=1.0">
-    <link media="all" type="text/css" rel="stylesheet" href="css/custom.css?v=1.3.3">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/modern-theme.css">
 </head>
-<body class="tooltips">
-<div class="container">
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar fade-in">
+            <div class="sidebar-header">
+                <h1><i class="zmdi zmdi-shopping-cart"></i> GSMS</h1>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <i class="zmdi zmdi-view-dashboard"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="manage-product.html" class="nav-link active">
+                            <i class="zmdi zmdi-assignment"></i>
+                            <span>Manage Products</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="order.html" class="nav-link">
+                            <i class="zmdi zmdi-shopping-basket"></i>
+                            <span>New Order</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
-    <div class="header content rows-content-header">
-        <button class="button-menu-mobile show-sidebar">
-            <i class="fa fa-bars"></i>
-        </button>
-        <div class="navbar navbar-default" role="navigation">
-            <div class="container">
-
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav visible-lg visible-md limit-chars">
-                        <ul class="breadcrumb">
-                            <a href="index.html">
-                                <i class="zmdi zmdi-view-dashboard zmdi-hc-fw" title="Orders"></i>
-                            </a>
-                            <a href="manage-product.html">
-                                <i class="zmdi zmdi-assignment zmdi-hc-fw" title="Products"></i>
-                            </a>
-                        </ul>
-                    </ul>
+        <!-- Main Content -->
+        <main class="main-content fade-in">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="zmdi zmdi-assignment"></i>
+                    Manage Products
+                </h1>
+                <div class="page-actions">
+                    <button type="button" class="btn-modern btn-primary-modern" onclick="openProductModal()">
+                        <i class="zmdi zmdi-plus"></i>
+                        Add New Product
+                    </button>
+                    <button type="button" class="btn-modern btn-secondary-modern" onclick="logout('admin')">
+                        <i class="zmdi zmdi-power"></i>
+                        Logout
+                    </button>
                 </div>
             </div>
-        </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Total Products</h3>
+                    <p class="stat-value" id="totalProducts">0</p>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="card-modern">
+                <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">Product Inventory</h2>
+                <table class="table-modern">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Unit</th>
+                            <th>Price Per Unit</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <!-- Products will be loaded here -->
+                    </tbody>
+                </table>
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="zmdi zmdi-assignment"></i>
+                    <h3>No Products Yet</h3>
+                    <p>Start by adding your first product</p>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div class="right content-page">
-        <div class="body content rows scroll-y">
-            <div class="box-info full" id="taskFormContainer">
-                <h2>Manage Products</h2>
-                <div class="panel-body pt-0">
-                    <div class="row mb-4">
-                        <div class="col-sm-12">
-                            <button type="button" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#productModal">
-                                Add New Product
-                            </button>
-                        </div>
+    <!-- Add/Edit Product Modal -->
+    <div class="modal-modern" id="productModal">
+        <div class="modal-content-modern">
+            <div class="modal-header-modern">
+                <h4 class="modal-title-modern" id="modalTitle">Add New Product</h4>
+            </div>
+            <div class="modal-body-modern">
+                <form id="productForm">
+                    <input type="hidden" name="id" id="id" value="0">
+                    
+                    <div class="form-group-modern">
+                        <label class="form-label-modern">Product Name <span style="color: #EF4444;">*</span></label>
+                        <input class="form-control-modern" placeholder="Enter product name" name="name" id="name" type="text" required>
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                        <th>Name</th>
-                        <th>Unit</th>
-                        <th>Price Per Unit</th>
-                        <th style="width: 150px">Action</th>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
+                    
+                    <div class="form-group-modern">
+                        <label class="form-label-modern">Unit of Measurement <span style="color: #EF4444;">*</span></label>
+                        <select name="uoms" id="uoms" class="form-control-modern" required>
+                            <option value="">Select unit...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group-modern">
+                        <label class="form-label-modern">Price Per Unit (₹) <span style="color: #EF4444;">*</span></label>
+                        <input class="form-control-modern" placeholder="0.00" name="price" id="price" type="number" step="0.01" min="0" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-modern">
+                <button type="button" class="btn-modern btn-secondary-modern" onclick="closeProductModal()">
+                    <i class="zmdi zmdi-close"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn-modern btn-primary-modern" id="saveProduct">
+                    <i class="zmdi zmdi-check"></i>
+                    Save Product
+                </button>
             </div>
         </div>
     </div>
 
-    <div class="modal fade-scale" id="productModal" role="dialog" data-backdrop="static">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add New Product</h4>
-                </div>
-                <div class="modal-body">
-                    <form id="productForm">
-                        <input type="hidden" name="id" id="id" value="0">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label >Name</label>
-                                    <input class="form-control" placeholder="Name" name="name" id="name" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label >Unit</label>
-                                    <select name="uoms" id="uoms" class="form-control">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label >Price Per Unit</label>
-                                    <input class="form-control" placeholder="Price Per Unit" name="price" id="price" type="text" value="">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveProduct">Save</button>
-                </div>
-            </div>
-        </div>
+    <!-- Loading Modal -->
+    <div class="modal-modern" id="loadingModal">
+        <div class="spinner"></div>
     </div>
-</div>
-<script src="js/packages/jquery.min.js"></script>
-<script src="js/custom/common.js"></script>
-<script src="js/custom/manage-product.js"></script>
-<script src="js/packages/bootstrap.min.js"></script>
+
+    <script src="js/packages/jquery.min.js"></script>
+    <script src="js/custom/common.js"></script>
+    <script>
+        requireRole('admin');
+    </script>
+    <script src="js/custom/manage-product.js"></script>
+    <script>
+        function openProductModal() {
+            $('#productModal').addClass('show');
+            $('#modalTitle').text('Add New Product');
+            $('#productForm')[0].reset();
+            $('#id').val('0');
+        }
+
+        function closeProductModal() {
+            $('#productModal').removeClass('show');
+        }
+
+        function editProduct(productId, name, uomId, price) {
+            $('#productModal').addClass('show');
+            $('#modalTitle').text('Edit Product');
+            $('#id').val(productId);
+            $('#name').val(name);
+            $('#uoms').val(uomId);
+            $('#price').val(price);
+        }
+
+        // Close modal when clicking outside
+        $(document).on('click', function(e) {
+            if ($(e.target).hasClass('modal-modern')) {
+                $('.modal-modern').removeClass('show');
+            }
+        });
+    </script>
 </body>
 </html>
